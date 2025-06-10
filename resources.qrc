@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/qt/qml">
+        <file>images/appIcon.svg</file>
+        <file>images/send.svg</file>
+    </qresource>
+</RCC>
