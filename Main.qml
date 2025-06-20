@@ -43,15 +43,21 @@ Window {
                     anchors.fill: parent
                     anchors.margins: 5
 
-                    TextArea {
-                        id: textAreaInput
+                    ScrollView {
+                        id: scrollViewInput
 
-                        placeholderText: "put your message"
                         Layout.fillWidth: true
                         Layout.fillHeight: true
-                        wrapMode: Text.Wrap
-                        font.pointSize: 12
-                        selectionColor: "darkred"
+
+                        TextArea {
+                            id: textAreaInput
+
+                            placeholderText: "put your message"
+                            wrapMode: Text.Wrap
+                            font.pointSize: 12
+                            selectionColor: "darkred"
+                            Universal.accent: "darkred"
+                        }
                     }
 
                     Button {
@@ -106,6 +112,7 @@ Window {
                             readOnly: true
                             wrapMode: Text.Wrap
                             selectionColor: "darkgreen"
+                            Universal.accent: "darkgreen"
                         }
                     }
                 }
@@ -131,7 +138,7 @@ Window {
         }
 
         Connections {
-            id: connectionsAll
+            id: connectionsMain
 
             function onMessageWasRead(message) {
                 textAreaOutput.text = message

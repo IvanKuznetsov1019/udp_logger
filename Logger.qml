@@ -29,6 +29,7 @@ Rectangle {
             Layout.fillHeight: true
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
             ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+            clip: true
 
             TextArea {
                 id: textAreaLogs
@@ -48,128 +49,28 @@ Rectangle {
         }
     }
 
-    Connections {
-        id: connectionsSender
+    Item {
+        id: itemSocketsColors
 
-        function onBytesWritten() {
-            textAreaLogs.text += Qt.formatDateTime(
-                        new Date(),
-                        "hh:mm:ss:zzz [dd.MM.yy]") + ": message was send\n"
-        }
-
-        function onReadySend() {
-            textAreaLogs.text += Qt.formatDateTime(
-                        new Date(),
-                        "hh:mm:ss:zzz [dd.MM.yy]") + ": message ready to send\n"
-        }
-
-        function onDisconnected() {
-            textAreaLogs.text += Qt.formatDateTime(
-                        new Date(),
-                        "hh:mm:ss:zzz [dd.MM.yy]") + ": Sender socket disconnect\n"
-        }
-
-        function onConnected() {
-            textAreaLogs.text += Qt.formatDateTime(
-                        new Date(),
-                        "hh:mm:ss:zzz [dd.MM.yy]") + ": Sender socket connect\n"
-        }
-
-        function onStateChanged(state) {
-            var stateName
-            switch (state) {
-            case 0:
-                stateName = "Unconnected State"
-                break
-            case 1:
-                stateName = "HostLookup State"
-                break
-            case 2:
-                stateName = "Connecting State"
-                break
-            case 3:
-                stateName = "Connected State"
-                break
-            case 4:
-                stateName = "Bound State"
-                break
-            case 6:
-                stateName = "Closing State"
-                break
-            case 5:
-                stateName = "Listening State"
-                break
-            default:
-                stateName = "Unknown State"
-                break
-            }
-            textAreaLogs.text += Qt.formatDateTime(new Date(),
-                                                   "hh:mm:ss:zzz [dd.MM.yy]")
-                    + ": Sender socket state was changed on: " + stateName + "\n"
-        }
-        target: sender
+        property var colors: ["darkgreen", "darkorange", "darkviolet", "darkblue"]
+        property var sockets: []
     }
 
     Connections {
-        id: connectionsReceiver
+        id: connectionsLog
 
-        function onReadyRead() {
-            textAreaLogs.text += Qt.formatDateTime(
-                        new Date(),
-                        "hh:mm:ss:zzz [dd.MM.yy]") + ": message ready to read\n"
-        }
-
-        function onMessageWasRead() {
-            textAreaLogs.text += Qt.formatDateTime(
-                        new Date(),
-                        "hh:mm:ss:zzz [dd.MM.yy]") + ": message was read\n"
-        }
-
-        function onDisconnected() {
-            textAreaLogs.text += Qt.formatDateTime(
-                        new Date(),
-                        "hh:mm:ss:zzz [dd.MM.yy]") + ": Receiver socket disconnect\n"
-        }
-
-        function onConnected() {
-            textAreaLogs.text += Qt.formatDateTime(
-                        new Date(),
-                        "hh:mm:ss:zzz [dd.MM.yy]") + ": Receiver socket connect\n"
-        }
-
-        function onStateChanged(state) {
-            var stateName
-            switch (state) {
-            case 0:
-                stateName = "Unconnected State"
-                break
-            case 1:
-                stateName = "HostLookup State"
-                break
-            case 2:
-                stateName = "Connecting State"
-                break
-            case 3:
-                stateName = "Connected State"
-                break
-            case 4:
-                stateName = "Bound State"
-                break
-            case 6:
-                stateName = "Closing State"
-                break
-            case 5:
-                stateName = "Listening State"
-                break
-            default:
-                stateName = "Unknown State"
-                break
+        function onEventDetected(id, description) {
+            if (itemSocketsColors.sockets.indexOf(id) === -1) {
+                itemSocketsColors.sockets.push(id)
             }
-            textAreaLogs.text += Qt.formatDateTime(new Date(),
-                                                   "hh:mm:ss:zzz [dd.MM.yy]")
-                    + ": Receiver socket state was changed on: " + stateName + "\n"
+            var currentColor = itemSocketsColors.colors[itemSocketsColors.sockets.indexOf(
+                                                            id) % 4]
+            textAreaLogs.text += Qt.formatDateTime(
+                        new Date(),
+                        "hh:mm:ss:zzz [dd.MM.yy]") + ": <font color="
+                    + currentColor + ">-" + id + "-</font> " + description + "\n"
         }
 
-        target: receiver
+        target: logger
     }
 }

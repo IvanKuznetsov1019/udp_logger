@@ -15,12 +15,10 @@ qt_add_executable(applogger
 qt_add_qml_module(applogger
     URI logger
     VERSION 1.0
-    QML_FILES
-        Main.qml
-        Logger.qml
-    SOURCES
-        myudpsocket.h myudpsocket.cpp
+    QML_FILES Main.qml Logger.qml
+    SOURCES myudpsocket.h myudpsocket.cpp
     RESOURCES images/appIcon.svg images/send.svg
+    SOURCES logger.h logger.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
